@@ -1,0 +1,36 @@
+version: '3.8'
+
+services: 
+ # Message Queue & Deduplicate
+ redis_db: 
+  image: redislabs/rebloom:latest # Use Bloom Filter to check URL-seen Test
+  container_name: crawler_redis
+  ports:
+   - "6379:6379"
+  networks:
+   - crawler_net
+  volumes:
+   - redis_data:/data
+  restart: always #automatically restart if error or I restart the desktop myself
+
+ # Database (mongoDB)
+ mongo_db:
+  image: mongo:latest
+  container_name: crawler_mongo
+  ports:
+   - "27017:27017"
+  environment:
+   - MONGO_INITDB_DATABASE=crawler_db
+  networks:
+   - crawler_net
+  volumes:
+   - mongo_data:/data/db
+  restart: always
+
+networks:
+  crawler_net:
+    driver: bridge
+
+volumes:
+  redis_data:
+  mongo_data:
