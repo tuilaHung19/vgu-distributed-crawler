@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DWC - Data Explorer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h2><i class="fas fa-spider"></i> DWC System</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-chart-pie"></i> Overview</a></li>
+                <li><a href="logs.html"><i class="fas fa-terminal"></i> System Logs</a></li>
+                <li class="active"><a href="data.html"><i class="fas fa-database"></i> Data Explorer</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> Settings & Control</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header>
+                <div class="header-title">
+                    <h1>Data Explorer</h1>
+                    <p class="subtitle">Query, filter, and analyze crawled articles from MongoDB</p>
+                </div>
+                </header>
+
+            <div class="bento-grid">
+                
+                <div class="bento-card filter-bar span-4" style="margin-bottom: 24px;">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search by title, author or keyword..." id="searchInput">
+                    </div>
+                    <div class="filter-group">
+                        <select class="custom-select" id="domainFilter">
+                            <option value="all">All Domains</option>
+                            <option value="tuoitre.vn">tuoitre.vn</option>
+                            <option value="thanhnien.vn">thanhnien.vn</option>
+                        </select>
+                        <select class="custom-select" id="dateFilter">
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="7days">Last 7 Days</option>
+                        </select>
+                        <button class="btn-apply-filter" id="btnFilter" style="border-radius: 10px;">
+                            <i class="fas fa-filter"></i> Apply
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bento-card span-4 table-section" style="margin-bottom: 24px;">
+                    <div class="section-header">
+                        <div class="header-title-group">
+                            <h2>Crawled Documents</h2>
+                        </div>
+                        <button class="btn-export"><i class="fas fa-file-export"></i> Export CSV</button>
+                    </div>
+                    
+                    <div class="table-scroll-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Article ID</th>
+                                    <th>Source</th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Published Date</th>
+                                    <th>Tags</th>
+                                    <th style="text-align: right; position: sticky; right: 0; background: #fff;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="articleTableBody">
+                                <tr>
+                                    <td class="font-mono text-muted">#6a2c21b2...</td>
+                                    <td><span class="pill pill-primary">tuoitre.vn</span></td>
+                                    <td class="article-title" title="Thi đánh giá năng lực Đại học Quốc gia TP.HCM...">Thi đánh giá năng lực Đại học Quốc gia TP.HCM đợt 2...</td>
+                                    <td>TRẦN HUỲNH</td>
+                                    <td class="text-muted">12/06/2026</td>
+                                    <td>
+                                        <div class="tag-group">
+                                            <span class="mini-tag">Giáo dục</span>
+                                            <span class="mini-tag">Tuyển sinh</span>
+                                        </div>
+                                    </td>
+                                    <td style="text-align: right; position: sticky; right: 0; background: #fff;">
+                                        <button class="btn-icon" title="View Content"><i class="fas fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-mono text-muted">#6a2c21c2...</td>
+                                    <td><span class="pill pill-primary">tuoitre.vn</span></td>
+                                    <td class="article-title" title="Kỳ lạ hải sâm hồng từ đáy biển bò lên phủ đầy bờ...">Kỳ lạ hải sâm hồng từ đáy biển bò lên phủ đầy bờ biển...</td>
+                                    <td>QUỐC HÙNG</td>
+                                    <td class="text-muted">11/06/2026</td>
+                                    <td>
+                                        <div class="tag-group">
+                                            <span class="mini-tag">Môi trường</span>
+                                            <span class="mini-tag">Động vật</span>
+                                        </div>
+                                    </td>
+                                    <td style="text-align: right; position: sticky; right: 0; background: #fff;">
+                                        <button class="btn-icon" title="View Content"><i class="fas fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-mono text-muted">#6a2c23d4...</td>
+                                    <td><span class="pill pill-success">thanhnien.vn</span></td>
+                                    <td class="article-title" title="Nhân viên ngân hàng làm lộ dữ liệu tiếp tay lừa đảo...">Nhân viên ngân hàng làm lộ dữ liệu tiếp tay lừa đảo...</td>
+                                    <td>AN BÌNH</td>
+                                    <td class="text-muted">10/06/2026</td>
+                                    <td>
+                                        <div class="tag-group">
+                                            <span class="mini-tag">Pháp luật</span>
+                                            <span class="mini-tag">Lừa đảo</span>
+                                        </div>
+                                    </td>
+                                    <td style="text-align: right; position: sticky; right: 0; background: #fff;">
+                                        <button class="btn-icon" title="View Content"><i class="fas fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="data-pagination">
+                        <div class="page-info">
+                            Showing <span style="font-weight: 700; color: var(--text-dark);">10</span> of 67
+                        </div>
+                        <div class="controls">
+                            <button class="btn-icon" title="Refresh"><i class="fas fa-sync-alt"></i></button>
+                            <button class="btn-icon disabled"><i class="fas fa-chevron-left"></i></button>
+                            <button class="btn-icon"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-card chart-section span-2">
+                    <div class="section-header" style="border-bottom: 1px solid #EDF2F7; padding-bottom: 16px; margin-bottom: 20px;">
+                        <div class="header-title-group">
+                            <h2>Sources Share</h2>
+                        </div>
+                    </div>
+                    <div class="pie-layout-horizontal">
+                        <div class="chart-wrapper" style="width: 180px; height: 180px;">
+                            <canvas id="sourcePieChart"></canvas>
+                        </div>
+                        <div class="chart-legend-right">
+                            <div class="legend-item"><span class="dot" style="background:#4318FF"></span> Tuổi Trẻ (65%)</div>
+                            <div class="legend-item"><span class="dot" style="background:#05CD99"></span> Thanh Niên (30%)</div>
+                            <div class="legend-item"><span class="dot" style="background:#FFCE20"></span> VnExpress (5%)</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById('sourcePieChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Tuổi Trẻ', 'Thanh Niên', 'VnExpress'],
+                    datasets: [{
+                        data: [65, 30, 5],
+                        backgroundColor: ['#4318FF', '#05CD99', '#FFCE20'],
+                        borderWidth: 2,
+                        borderColor: '#FFFFFF'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

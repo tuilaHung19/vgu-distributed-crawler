@@ -1,0 +1,15 @@
+# Bỏ qua file rác của Eclipse
+.metadata/
+.settings/
+.project
+.classpath
+bin/
+
+# Bỏ qua file rác của Java và Gradle
+*.class
+*.jar
+*.war
+
+build/
+target/
+.gradle/

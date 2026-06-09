@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DWC - System Logs</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h2><i class="fas fa-spider"></i> DWC System</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-chart-pie"></i> Overview</a></li>
+                <li class="active"><a href="logs.html"><i class="fas fa-terminal"></i> System Logs</a></li>
+                <li><a href="data.html"><i class="fas fa-database"></i> Data Explorer</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> Settings & Control</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header>
+                <div class="header-title">
+                    <h1>System Logs</h1>
+                    <p class="subtitle">Live stream of system events, warnings, and errors</p>
+                </div>
+                <div class="header-actions" style="display: flex; gap: 10px;">
+                    <button class="btn-outline"><i class="fas fa-pause"></i> Pause Stream</button>
+                    <button class="btn-outline" style="color: var(--danger); border-color: var(--danger);"><i class="fas fa-trash"></i> Clear</button>
+                </div>
+            </header>
+
+            <div class="bento-grid">
+                
+                <div class="bento-card filter-bar span-4" style="margin-bottom: 20px;">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search logs by keyword, URL, or error code..." id="logSearch">
+                    </div>
+                    <div class="filter-group">
+                        <select class="custom-select" id="logLevel">
+                            <option value="ALL">All Levels</option>
+                            <option value="INFO">INFO Only</option>
+                            <option value="WARN">WARNINGS</option>
+                            <option value="ERROR">ERRORS</option>
+                        </select>
+                        <select class="custom-select" id="logSource">
+                            <option value="ALL">All Sources</option>
+                            <option value="MASTER">Master Node</option>
+                            <option value="WORKER">Workers</option>
+                            <option value="REDIS">Redis Queue</option>
+                        </select>
+                        <button class="btn-apply-filter">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bento-card span-4" style="padding: 0; background-color: #0F172A; overflow: hidden;">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <div class="terminal-title">live-server-log.log</div>
+                        <div class="terminal-actions">
+                            <i class="fas fa-expand"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="terminal-window">
+                        <ul class="log-stream">
+                            <li class="log-line">
+                                <span class="log-time">10:15:01.234</span>
+                                <span class="log-level level-info">INFO</span>
+                                <span class="log-source">[Master-Node]</span>
+                                <span class="log-message">System initialized. Connected to MongoDB and Redis successfully.</span>
+                            </li>
+                            <li class="log-line">
+                                <span class="log-time">10:15:05.102</span>
+                                <span class="log-level level-info">INFO</span>
+                                <span class="log-source">[Redis-Queue]</span>
+                                <span class="log-message">Pushed 142 extracted links from tuoitre.vn to WAITING_LIST.</span>
+                            </li>
+                            <li class="log-line">
+                                <span class="log-time">10:15:08.775</span>
+                                <span class="log-level level-info">INFO</span>
+                                <span class="log-source">[Worker-01]</span>
+                                <span class="log-message">Successfully parsed article: "Thi đánh giá năng lực..."</span>
+                            </li>
+                            <li class="log-line">
+                                <span class="log-time">10:15:15.400</span>
+                                <span class="log-level level-warn">WARN</span>
+                                <span class="log-source">[Worker-02]</span>
+                                <span class="log-message">High latency detected (1200ms) while fetching vnexpress.net. Retrying...</span>
+                            </li>
+                            <li class="log-line">
+                                <span class="log-time">10:15:22.015</span>
+                                <span class="log-level level-error">ERROR</span>
+                                <span class="log-source">[Worker-03]</span>
+                                <span class="log-message">HTTP 403 Forbidden. Target domain has blocked the crawler IP. Moving URL to FAILED_LIST.</span>
+                            </li>
+                            <li class="log-line">
+                                <span class="log-time">10:15:25.882</span>
+                                <span class="log-level level-info">INFO</span>
+                                <span class="log-source">[Worker-01]</span>
+                                <span class="log-message">Successfully parsed article: "Giá vàng hôm nay tiếp tục..."</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</body>
+</html>

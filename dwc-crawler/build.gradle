@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.vgu.dwc'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Thư viện JSoup để Huy bóc tách thẻ HTML
+    implementation 'org.jsoup:jsoup:1.17.2'
+    
+    // Thư viện Jedis để Huy chọc vào Redis nhận task
+    implementation 'redis.clients:jedis:5.0.0'
+    implementation 'com.google.code.gson:gson:2.10.1' // Object --> JSON	
+}

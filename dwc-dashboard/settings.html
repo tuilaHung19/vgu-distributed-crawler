@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DWC - Settings & Control</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="logo">
+                <h2><i class="fas fa-spider"></i> DWC System</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-chart-pie"></i> Overview</a></li>
+                <li><a href="logs.html"><i class="fas fa-terminal"></i> System Logs</a></li>
+                <li><a href="data.html"><i class="fas fa-database"></i> Data Explorer</a></li>
+                <li class="active"><a href="settings.html"><i class="fas fa-cog"></i> Settings & Control</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header>
+                <div class="header-title">
+                    <h1>Settings & Control</h1>
+                    <p class="subtitle">Manage crawler behaviors, target sources, and system actions</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-save-outline"><i class="fas fa-save"></i> Save Changes</button>
+                </div>
+            </header>
+
+            <div class="bento-grid">
+                
+                <div class="bento-card span-2" style="margin-bottom: 24px;">
+                    <div class="section-header">
+                        <h2>Crawler Engine</h2>
+                    </div>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label>Request Delay (ms) <i class="fas fa-info-circle text-muted" title="Thời gian nghỉ giữa 2 lần cào"></i></label>
+                            <input type="number" class="form-input" value="1500">
+                        </div>
+                        <div class="form-group" style="margin-top: 10px;">
+                            <label>Connection Timeout (ms)</label>
+                            <input type="number" class="form-input" value="5000">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-card span-2" style="margin-bottom: 24px;">
+                    <div class="section-header">
+                        <h2>Target Domains</h2>
+                        <button class="btn-outline btn-sm"><i class="fas fa-plus"></i> Add Domain</button>
+                    </div>
+                    <ul class="domain-list">
+                        <li class="domain-item">
+                            <div class="d-info">
+                                <i class="fas fa-globe-asia text-primary"></i>
+                                <strong>tuoitre.vn</strong>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </li>
+                        <li class="domain-item">
+                            <div class="d-info">
+                                <i class="fas fa-globe-asia text-primary"></i>
+                                <strong>thanhnien.vn</strong>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bento-card span-4 danger-zone">
+                    <div class="section-header border-danger">
+                        <h2 class="text-danger"><i class="fas fa-exclamation-triangle"></i> Danger Zone</h2>
+                    </div>
+                    <div class="danger-actions">
+                        <div class="danger-item">
+                            <div class="danger-text">
+                                <strong>Purge Redis Queue</strong>
+                                <p>Xóa toàn bộ URL đang chờ và đang lỗi trong Redis. Hành động này không thể hoàn tác.</p>
+                            </div>
+                            <button class="btn-danger-outline">Purge Queue</button>
+                        </div>
+                        <div class="danger-item">
+                            <div class="danger-text">
+                                <strong>Drop MongoDB Collection</strong>
+                                <p>Xóa sạch toàn bộ dữ liệu bài báo đã cào được lưu trong MongoDB.</p>
+                            </div>
+                            <button class="btn-danger-outline">Drop Data</button>
+                        </div>
+                        <div class="danger-item">
+                            <div class="danger-text">
+                                <strong>Kill All Workers</strong>
+                                <p>Gửi lệnh tắt khẩn cấp (Shutdown) tới toàn bộ Worker Node đang chạy.</p>
+                            </div>
+                            <button class="btn-danger-solid">Kill All Workers</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+</body>
+</html>
