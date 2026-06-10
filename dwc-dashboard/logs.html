@@ -28,7 +28,6 @@
                     <p class="subtitle">Live stream of system events, warnings, and errors</p>
                 </div>
                 <div class="header-actions" style="display: flex; gap: 10px;">
-                    <button class="btn-outline"><i class="fas fa-pause"></i> Pause Stream</button>
                     <button class="btn-outline" style="color: var(--danger); border-color: var(--danger);"><i class="fas fa-trash"></i> Clear</button>
                 </div>
             </header>
@@ -74,42 +73,7 @@
                     
                     <div class="terminal-window">
                         <ul class="log-stream">
-                            <li class="log-line">
-                                <span class="log-time">10:15:01.234</span>
-                                <span class="log-level level-info">INFO</span>
-                                <span class="log-source">[Master-Node]</span>
-                                <span class="log-message">System initialized. Connected to MongoDB and Redis successfully.</span>
-                            </li>
-                            <li class="log-line">
-                                <span class="log-time">10:15:05.102</span>
-                                <span class="log-level level-info">INFO</span>
-                                <span class="log-source">[Redis-Queue]</span>
-                                <span class="log-message">Pushed 142 extracted links from tuoitre.vn to WAITING_LIST.</span>
-                            </li>
-                            <li class="log-line">
-                                <span class="log-time">10:15:08.775</span>
-                                <span class="log-level level-info">INFO</span>
-                                <span class="log-source">[Worker-01]</span>
-                                <span class="log-message">Successfully parsed article: "Thi đánh giá năng lực..."</span>
-                            </li>
-                            <li class="log-line">
-                                <span class="log-time">10:15:15.400</span>
-                                <span class="log-level level-warn">WARN</span>
-                                <span class="log-source">[Worker-02]</span>
-                                <span class="log-message">High latency detected (1200ms) while fetching vnexpress.net. Retrying...</span>
-                            </li>
-                            <li class="log-line">
-                                <span class="log-time">10:15:22.015</span>
-                                <span class="log-level level-error">ERROR</span>
-                                <span class="log-source">[Worker-03]</span>
-                                <span class="log-message">HTTP 403 Forbidden. Target domain has blocked the crawler IP. Moving URL to FAILED_LIST.</span>
-                            </li>
-                            <li class="log-line">
-                                <span class="log-time">10:15:25.882</span>
-                                <span class="log-level level-info">INFO</span>
-                                <span class="log-source">[Worker-01]</span>
-                                <span class="log-message">Successfully parsed article: "Giá vàng hôm nay tiếp tục..."</span>
-                            </li>
+                            
                         </ul>
                     </div>
                 </div>
@@ -117,5 +81,101 @@
             </div>
         </main>
     </div>
+    <script>
+        let isPaused = false;
+        let logInterval = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lấy log lần đầu
+            fetchLogs();
+            
+            // Cứ 1.5 giây lấy log mới một lần (tạo cảm giác live stream)
+            logInterval = setInterval(() => {
+                if (!isPaused) fetchLogs();
+            }, 1500);
+
+            // NÚT CLEAR
+            const btnClear = document.querySelector('.fa-trash').parentElement;
+            btnClear.addEventListener('click', async () => {
+                await fetch('http://127.0.0.1:8080/api/logs', { method: 'DELETE' });
+                document.querySelector('.log-stream').innerHTML = ''; // Xóa sạch màn hình
+            });
+
+            // Gắn sự kiện cho các ô Lọc
+            document.getElementById('logSearch').addEventListener('input', applyFilter);
+            document.getElementById('logLevel').addEventListener('change', applyFilter);
+            document.getElementById('logSource').addEventListener('change', applyFilter);
+        });
+
+        // HÀM LẤY LOG VÀ VẼ LÊN MÀN HÌNH
+        async function fetchLogs() {
+            try {
+                const res = await fetch('http://127.0.0.1:8080/api/logs');
+                const logs = await res.json();
+                
+                const terminalWindow = document.querySelector('.terminal-window');
+                const stream = document.querySelector('.log-stream');
+                
+                // 1. ĐO VỊ TRÍ THANH CUỘN (Smart Scrolling)
+                // Kiểm tra xem người dùng có đang ở dưới cùng của màn hình log không (cho phép sai số 50px)
+                const isScrolledToBottom = terminalWindow.scrollHeight - terminalWindow.clientHeight <= terminalWindow.scrollTop + 50;
+                
+                // 2. DOM BUFFERING (Chống Lag)
+                // Thay vì += thẳng vào stream gây giật, ta gom tất cả vào một biến String
+                let htmlBuffer = ''; 
+                
+                logs.forEach(log => {
+                    let lvlColor = '#3b82f6'; // Mặc định INFO (Xanh)
+                    if(log.level === 'WARN') lvlColor = '#f59e0b'; // Vàng
+                    if(log.level === 'ERROR') lvlColor = '#ef4444'; // Đỏ
+
+                    htmlBuffer += `
+                        <li class="log-line" data-level="${log.level}" data-source="${log.source}">
+                            <span class="log-time" style="color: #64748b;">${log.time}</span>
+                            <span class="log-level" style="color: ${lvlColor}; font-weight: 700; width: 50px; display: inline-block;">${log.level}</span>
+                            <span class="log-source" style="color: #a78bfa; font-weight: 600;">[${log.source}]</span>
+                            <span class="log-message" style="color: #e2e8f0; margin-left: 10px;">${log.message}</span>
+                        </li>
+                    `;
+                });
+                
+                // Đổ dữ liệu 1 lần duy nhất vào DOM (Tốc độ bàn thờ, không giật màn hình)
+                stream.innerHTML = htmlBuffer; 
+                
+                applyFilter(); // Chạy bộ lọc
+                
+                // 3. ÁP DỤNG CUỘN THÔNG MINH
+                // Chỉ tự động cuộn xuống đáy NẾU trước đó người dùng đang ở đáy
+                // Nếu người dùng đang lướt lên xem log cũ, không làm phiền họ
+                if (isScrolledToBottom) {
+                    terminalWindow.scrollTop = terminalWindow.scrollHeight;
+                }
+                
+            } catch (error) {}
+        }
+
+        // HÀM LỌC LOG MƯỢT MÀ
+        function applyFilter() {
+            const keyword = document.getElementById('logSearch').value.toLowerCase();
+            const level = document.getElementById('logLevel').value;
+            const source = document.getElementById('logSource').value;
+            
+            document.querySelectorAll('.log-line').forEach(line => {
+                const text = line.innerText.toLowerCase();
+                const lineLvl = line.getAttribute('data-level');
+                const lineSrc = line.getAttribute('data-source').toUpperCase();
+                
+                let matchSearch = text.includes(keyword);
+                let matchLevel = (level === 'ALL' || lineLvl === level);
+                let matchSource = (source === 'ALL' || lineSrc.includes(source));
+                
+                if (matchSearch && matchLevel && matchSource) {
+                    line.style.display = 'block';
+                } else {
+                    line.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html>

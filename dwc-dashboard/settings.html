@@ -6,6 +6,36 @@
     <title>DWC - Settings & Control</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .domain-container { margin-top: 15px; }
+        .domain-group {
+            border: 1px solid #e2e8f0; border-radius: 8px;
+            margin-bottom: 12px; background: #fff; overflow: hidden;
+        }
+        .domain-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 16px; background: #f8fafc;
+        }
+        .domain-header .d-actions { display: flex; align-items: center; gap: 15px; }
+        .btn-expand {
+            background: none; border: none; color: #64748b; cursor: pointer;
+            transition: 0.3s; padding: 5px; font-size: 16px;
+        }
+        .btn-expand.active { transform: rotate(180deg); color: #4f46e5; }
+        .domain-body {
+            display: none; padding: 12px 16px; border-top: 1px solid #e2e8f0;
+        }
+        .domain-body.show { display: block; }
+        .sub-link-list { list-style: none; padding: 0; margin: 0; }
+        .sub-link-list li {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 0; border-bottom: 1px dashed #e2e8f0; font-size: 14px; color: #4a5568;
+        }
+        .sub-link-list li:last-child { border-bottom: none; padding-bottom: 0; }
+        .btn-icon-sm { background: none; border: none; cursor: pointer; color: #ef4444; opacity: 0.5; transition: 0.2s;}
+        .btn-icon-sm:hover { opacity: 1; }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -27,56 +57,70 @@
                     <h1>Settings & Control</h1>
                     <p class="subtitle">Manage crawler behaviors, target sources, and system actions</p>
                 </div>
-                <div class="header-actions">
-                    <button class="btn-save-outline"><i class="fas fa-save"></i> Save Changes</button>
-                </div>
             </header>
 
             <div class="bento-grid">
                 
-                <div class="bento-card span-2" style="margin-bottom: 24px;">
-                    <div class="section-header">
-                        <h2>Crawler Engine</h2>
-                    </div>
-                    <div class="settings-form">
-                        <div class="form-group">
-                            <label>Request Delay (ms) <i class="fas fa-info-circle text-muted" title="Thời gian nghỉ giữa 2 lần cào"></i></label>
-                            <input type="number" class="form-input" value="1500">
-                        </div>
-                        <div class="form-group" style="margin-top: 10px;">
-                            <label>Connection Timeout (ms)</label>
-                            <input type="number" class="form-input" value="5000">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bento-card span-2" style="margin-bottom: 24px;">
+                <div class="bento-card span-4" style="margin-bottom: 24px;">
                     <div class="section-header">
                         <h2>Target Domains</h2>
-                        <button class="btn-outline btn-sm"><i class="fas fa-plus"></i> Add Domain</button>
+                        <button class="btn-outline btn-sm" id="btnAddDomain"><i class="fas fa-plus"></i> Add Domain</button>
                     </div>
-                    <ul class="domain-list">
-                        <li class="domain-item">
-                            <div class="d-info">
-                                <i class="fas fa-globe-asia text-primary"></i>
-                                <strong>tuoitre.vn</strong>
+                    
+                    <div class="domain-container">
+                        <div class="domain-group">
+                            <div class="domain-header">
+                                <div class="d-info"><i class="fas fa-globe-asia text-primary" style="margin-right: 8px;"></i><strong>tuoitre.vn</strong></div>
+                                <div class="d-actions">
+                                    <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+                                    <button class="btn-expand active"><i class="fas fa-chevron-down"></i></button>
+                                </div>
                             </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </li>
-                        <li class="domain-item">
-                            <div class="d-info">
-                                <i class="fas fa-globe-asia text-primary"></i>
-                                <strong>thanhnien.vn</strong>
+                            <div class="domain-body show">
+                                <ul class="sub-link-list" id="list-tuoitre">
+                                    <li><span><i class="fas fa-link text-muted" style="margin-right:8px;"></i>/kinh-doanh.htm</span> <button class="btn-icon-sm"><i class="fas fa-trash"></i></button></li>
+                                    <li><span><i class="fas fa-link text-muted" style="margin-right:8px;"></i>/the-thao.htm</span> <button class="btn-icon-sm"><i class="fas fa-trash"></i></button></li>
+                                    <li><span><i class="fas fa-link text-muted" style="margin-right:8px;"></i>/suc-khoe.htm</span> <button class="btn-icon-sm"><i class="fas fa-trash"></i></button></li>
+                                </ul>
                             </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </li>
-                    </ul>
+                        </div>
+
+                        <div class="domain-group">
+                            <div class="domain-header">
+                                <div class="d-info"><i class="fas fa-globe-asia text-success" style="margin-right: 8px;"></i><strong>thanhnien.vn</strong></div>
+                                <div class="d-actions">
+                                    <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+                                    <button class="btn-expand"><i class="fas fa-chevron-down"></i></button>
+                                </div>
+                            </div>
+                            <div class="domain-body">
+                                <ul class="sub-link-list" id="list-thanhnien">
+                                    <li><span><i class="fas fa-link text-muted" style="margin-right:8px;"></i>/kinh-te.htm</span> <button class="btn-icon-sm"><i class="fas fa-trash"></i></button></li>
+                                    <li><span><i class="fas fa-link text-muted" style="margin-right:8px;"></i>/the-thao.htm</span> <button class="btn-icon-sm"><i class="fas fa-trash"></i></button></li>
+                                    <li><span><i class="fas fa-link text-muted" style="margin-right:8px;"></i>/suc-khoe.htm</span> <button class="btn-icon-sm"><i class="fas fa-trash"></i></button></li>
+                                    <li><span><i class="fas fa-link text-muted" style="margin-right:8px;"></i>/the-gioi.htm</span> <button class="btn-icon-sm"><i class="fas fa-trash"></i></button></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="domain-group">
+                            <div class="domain-header">
+                                <div class="d-info"><i class="fas fa-globe-asia text-warning" style="margin-right: 8px;"></i><strong>vnexpress.net</strong></div>
+                                <div class="d-actions">
+                                    <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+                                    <button class="btn-expand"><i class="fas fa-chevron-down"></i></button>
+                                </div>
+                            </div>
+                            <div class="domain-body">
+                                <ul class="sub-link-list" id="list-vnexpress">
+                                    <li><span><i class="fas fa-link text-muted" style="margin-right:8px;"></i>/kinh-doanh</span> <button class="btn-icon-sm"><i class="fas fa-trash"></i></button></li>
+                                    <li><span><i class="fas fa-link text-muted" style="margin-right:8px;"></i>/the-thao</span> <button class="btn-icon-sm"><i class="fas fa-trash"></i></button></li>
+                                    <li><span><i class="fas fa-link text-muted" style="margin-right:8px;"></i>/suc-khoe</span> <button class="btn-icon-sm"><i class="fas fa-trash"></i></button></li>
+                                    <li><span><i class="fas fa-link text-muted" style="margin-right:8px;"></i>/the-gioi</span> <button class="btn-icon-sm"><i class="fas fa-trash"></i></button></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="bento-card span-4 danger-zone">
@@ -89,21 +133,21 @@
                                 <strong>Purge Redis Queue</strong>
                                 <p>Xóa toàn bộ URL đang chờ và đang lỗi trong Redis. Hành động này không thể hoàn tác.</p>
                             </div>
-                            <button class="btn-danger-outline">Purge Queue</button>
+                            <button class="btn-danger-outline" id="btnPurgeRedis">Purge Queue</button>
                         </div>
                         <div class="danger-item">
                             <div class="danger-text">
                                 <strong>Drop MongoDB Collection</strong>
                                 <p>Xóa sạch toàn bộ dữ liệu bài báo đã cào được lưu trong MongoDB.</p>
                             </div>
-                            <button class="btn-danger-outline">Drop Data</button>
+                            <button class="btn-danger-outline" id="btnDropMongo">Drop Data</button>
                         </div>
                         <div class="danger-item">
                             <div class="danger-text">
                                 <strong>Kill All Workers</strong>
                                 <p>Gửi lệnh tắt khẩn cấp (Shutdown) tới toàn bộ Worker Node đang chạy.</p>
                             </div>
-                            <button class="btn-danger-solid">Kill All Workers</button>
+                            <button class="btn-danger-solid" id="btnKillAll">Kill All Workers</button>
                         </div>
                     </div>
                 </div>
@@ -111,5 +155,156 @@
             </div>
         </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. NÚT: XÓA SẠCH REDIS QUEUE
+            document.getElementById('btnPurgeRedis').addEventListener('click', async () => {
+                const confirmPurge = confirm("🚨 BẠN CÓ CHẮC CHẮN MUỐN XÓA REDIS?\nToàn bộ link đang chờ cào và link lỗi sẽ bị xóa vĩnh viễn.");
+                if (confirmPurge) {
+                    try {
+                        const response = await fetch('http://127.0.0.1:8080/api/queue/purge', { method: 'DELETE' });
+                        if (response.ok) alert("✅ Đã dọn sạch Redis Queue!");
+                        else alert("❌ Có lỗi xảy ra khi dọn Redis.");
+                    } catch (error) {
+                        console.error("Lỗi kết nối:", error);
+                    }
+                }
+            });
+
+            // 2. NÚT: XÓA SẠCH MONGODB
+            document.getElementById('btnDropMongo').addEventListener('click', async () => {
+                const confirmDrop = confirm("🚨 CẢNH BÁO MẤT DỮ LIỆU!!!\nBạn chuẩn bị xóa TẤT CẢ bài báo đã cào được. Không thể hoàn tác!");
+                if (confirmDrop) {
+                    try {
+                        const response = await fetch('http://127.0.0.1:8080/api/articles/drop-all', { method: 'DELETE' });
+                        if (response.ok) alert("✅ Đã xóa toàn bộ dữ liệu trong MongoDB!");
+                        else alert("❌ Có lỗi xảy ra khi xóa MongoDB.");
+                    } catch (error) {
+                        console.error("Lỗi kết nối:", error);
+                    }
+                }
+            });
+
+            // 3. NÚT: KILL ALL WORKERS
+            document.getElementById('btnKillAll').addEventListener('click', async () => {
+                const confirmKill = confirm("⚠️ Bạn muốn phát lệnh dừng tất cả các Bot đang chạy?");
+                if (confirmKill) {
+                    try {
+                        const response = await fetch('http://127.0.0.1:8080/api/workers/kill-all', { method: 'POST' });
+                        if (response.ok) alert("✅ Đã phát lệnh ngưng hoạt động tới toàn bộ Worker!");
+                        else alert("❌ Có lỗi xảy ra khi Kill Worker.");
+                    } catch (error) {
+                        console.error("Lỗi kết nối:", error);
+                    }
+                }
+            });
+
+            // 4. LOGIC: ĐÓNG/MỞ CÁC CHUYÊN MỤC CON (ACCORDION)
+            document.querySelectorAll('.btn-expand').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const header = e.currentTarget.closest('.domain-header');
+                    const body = header.nextElementSibling;
+                    
+                    btn.classList.toggle('active');
+                    body.classList.toggle('show');
+                });
+            });
+
+            // 5. LOGIC LƯU TRỮ LOCALSTORAGE & VẼ GIAO DIỆN (NÂNG CẤP)
+            // =================================================================
+            
+            // Hàm vẽ 1 link con lên giao diện
+            function renderSubLink(newUrl) {
+                try {
+                    const urlObj = new URL(newUrl);
+                    const host = urlObj.hostname; 
+                    const path = urlObj.pathname; 
+                    
+                    let targetListId = '';
+                    if(host.includes('tuoitre.vn')) targetListId = 'list-tuoitre';
+                    else if(host.includes('thanhnien.vn')) targetListId = 'list-thanhnien';
+                    else if(host.includes('vnexpress.net')) targetListId = 'list-vnexpress';
+
+                    if (targetListId) {
+                        const ul = document.getElementById(targetListId);
+                        
+                        // Tạo thẻ li mới
+                        const li = document.createElement('li');
+                        li.style.cssText = "background: #f0fdf4; padding-left: 10px; border-left: 3px solid #22c55e;";
+                        li.innerHTML = `
+                            <span><i class="fas fa-link text-success" style="margin-right:8px;"></i>${path} <span style="font-size:11px; color:#22c55e; margin-left:5px; font-weight: bold;">(Custom)</span></span>
+                            <button class="btn-icon-sm btn-delete-custom" data-url="${newUrl}"><i class="fas fa-trash"></i></button>
+                        `;
+                        ul.appendChild(li);
+
+                        // Gắn sự kiện xóa cho nút thùng rác vừa được tạo
+                        li.querySelector('.btn-delete-custom').addEventListener('click', function() {
+                            const urlToRemove = this.getAttribute('data-url');
+                            deleteCustomDomain(urlToRemove); // Xóa khỏi LocalStorage
+                            li.remove(); // Xóa khỏi màn hình
+                        });
+
+                        // Tự động xổ danh sách ra
+                        ul.parentElement.classList.add('show');
+                        ul.parentElement.previousElementSibling.querySelector('.btn-expand').classList.add('active');
+                    }
+                } catch (e) { console.log("Lỗi parse URL để vẽ giao diện:", e); }
+            }
+
+            // 6. KHÔI PHỤC DỮ LIỆU KHI MỞ TRANG
+            function loadCustomDomains() {
+                // Lấy mảng link từ LocalStorage (Nếu chưa có thì tạo mảng rỗng)
+                const savedLinks = JSON.parse(localStorage.getItem('dwcCustomDomains')) || [];
+                savedLinks.forEach(link => {
+                    renderSubLink(link); // Vẽ lại từng link
+                });
+            }
+            // Chạy ngay khi load trang
+            loadCustomDomains();
+
+            // Hàm xóa link khỏi LocalStorage
+            function deleteCustomDomain(url) {
+                let savedLinks = JSON.parse(localStorage.getItem('dwcCustomDomains')) || [];
+                savedLinks = savedLinks.filter(item => item !== url); // Lọc bỏ link cần xóa
+                localStorage.setItem('dwcCustomDomains', JSON.stringify(savedLinks)); // Lưu lại
+            }
+
+            // 7. NÚT: ADD DOMAIN (THÊM LINK CÀO MỚI)
+            document.getElementById('btnAddDomain').addEventListener('click', async () => {
+                const newUrl = prompt("Nhập đường dẫn chuyên mục mới cần cào:\n(Ví dụ: https://tuoitre.vn/phap-luat.htm)");
+                
+                if (newUrl && newUrl.trim() !== "") {
+                    // Kiểm tra xem link đã tồn tại chưa để tránh trùng lặp
+                    let savedLinks = JSON.parse(localStorage.getItem('dwcCustomDomains')) || [];
+                    if (savedLinks.includes(newUrl)) {
+                        alert("⚠️ Chuyên mục này đã được thêm từ trước rồi!");
+                        return;
+                    }
+
+                    try {
+                        // Gọi API lưu xuống Java để Bot bắt đầu cào
+                        const response = await fetch(`http://127.0.0.1:8080/api/spider/add-seed?url=${encodeURIComponent(newUrl)}`, { method: 'POST' });
+                        
+                        if (response.ok) {
+                            alert("✅ Đã bơm link thành công! Hệ thống đang tiến hành quét...");
+                            
+                            // Lưu vào LocalStorage
+                            savedLinks.push(newUrl);
+                            localStorage.setItem('dwcCustomDomains', JSON.stringify(savedLinks));
+                            
+                            // Vẽ lên màn hình
+                            renderSubLink(newUrl);
+                        } else {
+                            alert("❌ Hệ thống từ chối link này. Hãy đảm bảo Spring Boot đang chạy ổn định.");
+                        }
+                    } catch (error) {
+                        alert("❌ Không thể kết nối tới máy chủ Spider.");
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>

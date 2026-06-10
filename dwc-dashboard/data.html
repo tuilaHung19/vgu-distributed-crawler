@@ -7,6 +7,46 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); z-index: 1000;
+            display: flex; justify-content: center; align-items: center;
+            backdrop-filter: blur(2px);
+        }
+        .modal-content {
+            background: #fff; width: 90%; max-width: 800px; height: 90vh;
+            border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .modal-header {
+            padding: 24px; border-bottom: 1px solid #edf2f7;
+            display: flex; justify-content: space-between; align-items: flex-start;
+        }
+        .article-detail-title { font-size: 24px; font-weight: 700; color: #1a202c; margin: 0 0 8px 0; }
+        .author-detail { font-size: 14px; color: #718096; margin: 0; }
+        .close-modal-btn {
+            background: none; border: none; font-size: 20px; color: #a0aec0;
+            cursor: pointer; margin-left: 20px; transition: 0.2s;
+        }
+        .close-modal-btn:hover { color: #e53e3e; }
+        .modal-body-wrapper { flex: 1; padding: 24px; overflow-y: auto; }
+        .metadata-section {
+            display: flex; flex-wrap: wrap; gap: 15px; background: #f7fafc;
+            padding: 15px; border-radius: 8px; margin-bottom: 24px; color: #4a5568; font-size: 14px;
+        }
+        .meta-item i { margin-right: 5px; color: #a0aec0; }
+        .tag-group-detail { display: inline-flex; flex-wrap: wrap; gap: 5px; margin-left: 10px; }
+        .article-content-section h2 { font-size: 18px; font-weight: 600; color: #2d3748; margin-bottom: 16px; }
+        .raw-content-block {
+            white-space: pre-wrap; font-family: inherit; line-height: 1.7;
+            color: #2d3748; background: #fff; border: none; padding: 0; margin: 0;
+        }
+        .modal-footer {
+            padding: 16px 24px; border-top: 1px solid #edf2f7; display: flex; justify-content: flex-end;
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -28,7 +68,7 @@
                     <h1>Data Explorer</h1>
                     <p class="subtitle">Query, filter, and analyze crawled articles from MongoDB</p>
                 </div>
-                </header>
+            </header>
 
             <div class="bento-grid">
                 
@@ -42,6 +82,7 @@
                             <option value="all">All Domains</option>
                             <option value="tuoitre.vn">tuoitre.vn</option>
                             <option value="thanhnien.vn">thanhnien.vn</option>
+                            <option value="vnexpress.net">vnexpress.net</option>
                         </select>
                         <select class="custom-select" id="dateFilter">
                             <option value="all">All Time</option>
@@ -76,61 +117,13 @@
                                 </tr>
                             </thead>
                             <tbody id="articleTableBody">
-                                <tr>
-                                    <td class="font-mono text-muted">#6a2c21b2...</td>
-                                    <td><span class="pill pill-primary">tuoitre.vn</span></td>
-                                    <td class="article-title" title="Thi đánh giá năng lực Đại học Quốc gia TP.HCM...">Thi đánh giá năng lực Đại học Quốc gia TP.HCM đợt 2...</td>
-                                    <td>TRẦN HUỲNH</td>
-                                    <td class="text-muted">12/06/2026</td>
-                                    <td>
-                                        <div class="tag-group">
-                                            <span class="mini-tag">Giáo dục</span>
-                                            <span class="mini-tag">Tuyển sinh</span>
-                                        </div>
-                                    </td>
-                                    <td style="text-align: right; position: sticky; right: 0; background: #fff;">
-                                        <button class="btn-icon" title="View Content"><i class="fas fa-eye"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="font-mono text-muted">#6a2c21c2...</td>
-                                    <td><span class="pill pill-primary">tuoitre.vn</span></td>
-                                    <td class="article-title" title="Kỳ lạ hải sâm hồng từ đáy biển bò lên phủ đầy bờ...">Kỳ lạ hải sâm hồng từ đáy biển bò lên phủ đầy bờ biển...</td>
-                                    <td>QUỐC HÙNG</td>
-                                    <td class="text-muted">11/06/2026</td>
-                                    <td>
-                                        <div class="tag-group">
-                                            <span class="mini-tag">Môi trường</span>
-                                            <span class="mini-tag">Động vật</span>
-                                        </div>
-                                    </td>
-                                    <td style="text-align: right; position: sticky; right: 0; background: #fff;">
-                                        <button class="btn-icon" title="View Content"><i class="fas fa-eye"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="font-mono text-muted">#6a2c23d4...</td>
-                                    <td><span class="pill pill-success">thanhnien.vn</span></td>
-                                    <td class="article-title" title="Nhân viên ngân hàng làm lộ dữ liệu tiếp tay lừa đảo...">Nhân viên ngân hàng làm lộ dữ liệu tiếp tay lừa đảo...</td>
-                                    <td>AN BÌNH</td>
-                                    <td class="text-muted">10/06/2026</td>
-                                    <td>
-                                        <div class="tag-group">
-                                            <span class="mini-tag">Pháp luật</span>
-                                            <span class="mini-tag">Lừa đảo</span>
-                                        </div>
-                                    </td>
-                                    <td style="text-align: right; position: sticky; right: 0; background: #fff;">
-                                        <button class="btn-icon" title="View Content"><i class="fas fa-eye"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                     
                     <div class="data-pagination">
                         <div class="page-info">
-                            Showing <span style="font-weight: 700; color: var(--text-dark);">10</span> of 67
+                            Showing <span style="font-weight: 700; color: var(--text-dark);">0</span> of 0
                         </div>
                         <div class="controls">
                             <button class="btn-icon" title="Refresh"><i class="fas fa-sync-alt"></i></button>
@@ -151,9 +144,9 @@
                             <canvas id="sourcePieChart"></canvas>
                         </div>
                         <div class="chart-legend-right">
-                            <div class="legend-item"><span class="dot" style="background:#4318FF"></span> Tuổi Trẻ (65%)</div>
-                            <div class="legend-item"><span class="dot" style="background:#05CD99"></span> Thanh Niên (30%)</div>
-                            <div class="legend-item"><span class="dot" style="background:#FFCE20"></span> VnExpress (5%)</div>
+                            <div class="legend-item"><span class="dot" style="background:#4318FF"></span> Tuổi Trẻ</div>
+                            <div class="legend-item"><span class="dot" style="background:#05CD99"></span> Thanh Niên</div>
+                            <div class="legend-item"><span class="dot" style="background:#FFCE20"></span> VnExpress</div>
                         </div>
                     </div>
                 </div>
@@ -162,27 +155,315 @@
         </main>
     </div>
 
+    <div id="articleModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="header-left">
+                    <h1 id="modalArticleTitle" class="article-detail-title">Đang tải...</h1>
+                    <p id="modalAuthor" class="author-detail">by ...</p>
+                </div>
+                <button class="close-modal-btn" id="btnCloseModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body-wrapper">
+                <div class="metadata-section">
+                    <div class="meta-item"><i class="fas fa-calendar-alt"></i> Published: <span id="modalPublishedDate">N/A</span></div>
+                    <div class="meta-item"><i class="fas fa-globe-asia"></i> Source: <span id="modalDomain">N/A</span></div>
+                    <div class="meta-item"><i class="fas fa-robot"></i> Crawled by: <span id="modalWorker">N/A</span></div>
+                    <div class="meta-item"><i class="fas fa-tags"></i> Tags: <div id="modalTags" class="tag-group-detail"></div></div>
+                </div>
+                
+                <div class="article-content-section">
+                    <h2>Raw Crawled Content</h2>
+                    <pre id="modalContent" class="raw-content-block">Đang tải nội dung...</pre>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn-kill" id="btnConfirmClose" style="padding: 8px 16px; border-radius: 6px; border: 1px solid #e2e8f0; background: #fff; cursor: pointer; font-weight: 600; color: #4a5568;">Close Detail</button>
+            </div>
+        </div>
+    </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const ctx = document.getElementById('sourcePieChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['Tuổi Trẻ', 'Thanh Niên', 'VnExpress'],
-                    datasets: [{
-                        data: [65, 30, 5],
-                        backgroundColor: ['#4318FF', '#05CD99', '#FFCE20'],
-                        borderWidth: 2,
-                        borderColor: '#FFFFFF'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } }
+        // Các biến toàn cục
+        let currentPage = 0;
+        const pageSize = 10;
+        let totalPages = 0;
+        let currentArticlesData = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchRecentArticles(currentPage);
+            drawPieChart();
+
+            // Kích hoạt các nút phân trang
+            const btnPrev = document.querySelector('.fa-chevron-left').parentElement;
+            const btnNext = document.querySelector('.fa-chevron-right').parentElement;
+            const btnRefresh = document.querySelector('.fa-sync-alt').parentElement;
+
+            btnPrev.addEventListener('click', () => {
+                if (currentPage > 0) {
+                    currentPage--;
+                    fetchRecentArticles(currentPage);
                 }
             });
+
+            btnNext.addEventListener('click', () => {
+                if (currentPage < totalPages - 1) {
+                    currentPage++;
+                    fetchRecentArticles(currentPage);
+                }
+            });
+
+            btnRefresh.addEventListener('click', () => {
+                currentPage = 0; 
+                fetchRecentArticles(currentPage);
+                drawPieChart();
+            });
+
+            // Kích hoạt nút Filter (Apply)
+            document.getElementById('btnFilter').addEventListener('click', () => {
+                currentPage = 0; 
+                fetchRecentArticles(currentPage);
+            });
+
+            // Kích hoạt nút Export CSV
+            document.querySelector('.btn-export').addEventListener('click', exportToCSV);
+
+            // Logic đóng Popup (Modal)
+            const modal = document.getElementById('articleModal');
+            const btnCloseModal = document.getElementById('btnCloseModal');
+            const btnConfirmClose = document.getElementById('btnConfirmClose');
+
+            const closeModal = () => { modal.style.display = 'none'; };
+            btnCloseModal.addEventListener('click', closeModal);
+            btnConfirmClose.addEventListener('click', closeModal);
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) closeModal();
+            });
         });
+
+        // 1. LẤY DỮ LIỆU BÀI VIẾT (CÓ BỘ LỌC)
+        async function fetchRecentArticles(page) {
+            try {
+                const keyword = document.getElementById('searchInput').value;
+                const domain = document.getElementById('domainFilter').value;
+
+                const url = `http://127.0.0.1:8080/api/articles/recent?page=${page}&size=${pageSize}&keyword=${encodeURIComponent(keyword)}&domain=${domain}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                const articles = data.articles;
+                currentArticlesData = articles;
+                totalPages = data.totalPages;
+                
+                // Cập nhật text Phân trang
+                const pageInfo = document.querySelector('.page-info');
+                if (articles.length > 0) {
+                    const startItem = (data.currentPage * pageSize) + 1;
+                    const endItem = startItem + articles.length - 1;
+                    pageInfo.innerHTML = `Showing <span style="font-weight: 700; color: #1a202c;">${startItem}-${endItem}</span> of ${data.totalItems}`;
+                } else {
+                    pageInfo.innerHTML = `No data found`;
+                }
+
+                // Cập nhật trạng thái nút Prev/Next
+                const btnPrev = document.querySelector('.fa-chevron-left').parentElement;
+                const btnNext = document.querySelector('.fa-chevron-right').parentElement;
+                if (data.currentPage === 0) btnPrev.classList.add('disabled');
+                else btnPrev.classList.remove('disabled');
+                if (data.currentPage >= totalPages - 1 || totalPages === 0) btnNext.classList.add('disabled');
+                else btnNext.classList.remove('disabled');
+
+                // Vẽ Bảng
+                const tbody = document.getElementById('articleTableBody') || document.querySelector('tbody'); 
+                if (!tbody) return;
+                tbody.innerHTML = ''; 
+
+                articles.forEach(article => {
+                    const shortId = "#" + article.id.substring(0, 8) + "...";
+                    let badgeColor = 'primary';
+                    if (article.sourceDomain.includes('thanhnien')) badgeColor = 'success';
+                    else if (article.sourceDomain.includes('vnexpress')) badgeColor = 'warning';
+
+                    let tagsHtml = '';
+                    if (article.tags && article.tags.length > 0) {
+                        article.tags.forEach(tag => {
+                            tagsHtml += `<span class="mini-tag" style="background:#e0e7ff; color:#4f46e5; padding:2px 8px; border-radius:12px; font-size:12px; margin-right:4px;">${tag}</span>`;
+                        });
+                    } else {
+                        tagsHtml = `<span style="color:#a0aec0; font-size:12px;">Không có</span>`;
+                    }
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td style="font-family: monospace; color:#718096;">${shortId}</td>
+                            <td><span class="pill pill-${badgeColor}">${article.sourceDomain}</span></td>
+                            <td style="max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight:500;">
+                                ${article.title}
+                            </td>
+                            <td style="color:#4a5568;">${article.author || 'Ẩn danh'}</td>
+                            <td style="color:#718096;">${article.publishedDate || 'N/A'}</td>
+                            <td><div class="tag-group">${tagsHtml}</div></td>
+                            <td style="text-align: right; white-space: nowrap;">
+                                <button class="btn-icon view-content-btn" data-id="${article.id}" title="Xem nội dung thô (MongoDB)" style="color: #10b981; cursor: pointer; background: #D1FAE5; padding: 6px 10px; border-radius: 6px; border: none; font-size: 14px; margin-right: 6px;">
+                                    <i class="fas fa-database"></i>
+                                </button>
+                                <a href="${article.url}" target="_blank" title="Mở bài viết gốc trên báo" style="color: #6366f1; cursor: pointer; background: #EEF2FF; padding: 6px 10px; border-radius: 6px; display: inline-block; font-size: 14px;">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                // Gắn sự kiện mở Modal cho các nút con mắt vừa vẽ
+                document.querySelectorAll('.view-content-btn').forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        const articleId = event.currentTarget.getAttribute('data-id');
+                        const article = currentArticlesData.find(a => a.id === articleId);
+                        if (article) showArticleModal(article);
+                    });
+                });
+
+            } catch (error) {
+                console.error("Lỗi tải danh sách bài viết:", error);
+            }
+        }
+
+        // 2. HÀM HIỂN THỊ POPUP (MODAL)
+        function showArticleModal(article) {
+            const modal = document.getElementById('articleModal');
+            document.getElementById('modalArticleTitle').innerText = article.title;
+            document.getElementById('modalAuthor').innerText = `by ${article.author || 'Ẩn danh'}`;
+            document.getElementById('modalPublishedDate').innerText = article.publishedDate || 'N/A';
+            document.getElementById('modalDomain').innerText = article.sourceDomain;
+            document.getElementById('modalWorker').innerText = article.workerId || 'N/A';
+            
+            const tagsWrapper = document.getElementById('modalTags');
+            tagsWrapper.innerHTML = '';
+            if (article.tags && article.tags.length > 0) {
+                article.tags.forEach(tag => {
+                    tagsWrapper.innerHTML += `<span class="mini-tag" style="background:#e0e7ff; color:#4f46e5; padding:2px 8px; border-radius:12px; font-size:12px; margin-right:4px;">${tag}</span>`;
+                });
+            } else {
+                tagsWrapper.innerHTML = `<span style="color:#a0aec0; font-size:12px;">Không có tag</span>`;
+            }
+
+            document.getElementById('modalContent').innerText = article.content;
+            modal.style.display = 'flex';
+        }
+
+        // 3. VẼ BIỂU ĐỒ TRÒN
+        async function drawPieChart() {
+            try {
+                const response = await fetch('http://127.0.0.1:8080/api/articles/domain-stats');
+                const stats = await response.json();
+
+                const labels = [];
+                const data = [];
+                const backgroundColors = []; 
+
+                stats.forEach(stat => {
+                    labels.push(stat.domain);
+                    data.push(stat.success);
+                    
+                    if(stat.domain.includes('tuoitre')) backgroundColors.push('#4318FF'); 
+                    else if(stat.domain.includes('thanhnien')) backgroundColors.push('#05CD99'); 
+                    else backgroundColors.push('#FFCE20'); 
+                });
+
+                const ctx = document.getElementById('sourcePieChart'); 
+                if (!ctx) return;
+
+                if(window.myPieChart) window.myPieChart.destroy();
+
+                window.myPieChart = new Chart(ctx, {
+                    type: 'doughnut', 
+                    data: {
+                        labels: labels,
+                        datasets: [{ data: data, backgroundColor: backgroundColors, borderWidth: 0, hoverOffset: 4 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { display: false } } }
+                });
+            } catch (error) {
+                console.error("Lỗi vẽ biểu đồ:", error);
+            }
+        }
+
+        // 4. HÀM TẠO VÀ TẢI FILE CSV (FULL DỮ LIỆU)
+        async function exportToCSV() {
+            try {
+                const btnExport = document.querySelector('.btn-export');
+                const originalText = btnExport.innerHTML;
+                btnExport.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang trích xuất...';
+                btnExport.disabled = true;
+                btnExport.style.opacity = '0.7';
+
+                const keyword = document.getElementById('searchInput').value;
+                const domain = document.getElementById('domainFilter').value;
+
+                const url = `http://127.0.0.1:8080/api/articles/recent?page=0&size=100000&keyword=${encodeURIComponent(keyword)}&domain=${domain}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                const allArticles = data.articles; 
+
+                if (!allArticles || allArticles.length === 0) {
+                    alert("Không có dữ liệu phù hợp để xuất!");
+                    btnExport.innerHTML = originalText;
+                    btnExport.disabled = false;
+                    btnExport.style.opacity = '1';
+                    return;
+                }
+
+                let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; 
+                csvContent += "Article ID,Nguồn báo,Tiêu đề,Tác giả,Ngày đăng,Đường dẫn,Nội dung\n"; 
+
+                const escapeCSV = (str) => {
+                    if (!str) return '""';
+                    let cleanStr = str.replace(/\r?\n|\r/g, " "); 
+                    return `"${cleanStr.replace(/"/g, '""')}"`;
+                };
+
+                allArticles.forEach(article => {
+                    let id = article.id;
+                    let source = article.sourceDomain;
+                    let title = escapeCSV(article.title);
+                    let author = escapeCSV(article.author || 'Ẩn danh');
+                    let date = article.publishedDate || 'N/A';
+                    let link = article.url;
+                    let content = escapeCSV(article.content); 
+
+                    csvContent += `${id},${source},${title},${author},${date},${link},${content}\n`;
+                });
+
+                // 7. Kích hoạt tải file xuống máy tính bằng công nghệ BLOB (Chống giới hạn 2MB)
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const blobUrl = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.setAttribute("href", blobUrl);
+                link.setAttribute("download", `DWC_Dataset_${new Date().getTime()}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                btnExport.innerHTML = originalText;
+                btnExport.disabled = false;
+                btnExport.style.opacity = '1';
+
+                // Giải phóng bộ nhớ RAM sau khi tải xong
+                URL.revokeObjectURL(blobUrl);
+
+            } catch (error) {
+                console.error("Lỗi khi tải CSV:", error);
+                alert("Đã xảy ra lỗi khi trích xuất dữ liệu. Vui lòng kiểm tra console.");
+                const btnExport = document.querySelector('.btn-export');
+                btnExport.innerHTML = '<i class="fas fa-file-export"></i> Export CSV';
+                btnExport.disabled = false;
+                btnExport.style.opacity = '1';
+            }
+        }
     </script>
 </body>
 </html>

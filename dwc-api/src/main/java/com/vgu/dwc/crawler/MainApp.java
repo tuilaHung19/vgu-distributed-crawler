@@ -49,6 +49,7 @@ public class MainApp {
         int workerCount = 1;
 
         // Vòng lặp: Rút link từ Redis ra để xử lý
+        /*
         while (!queue.isEmpty()) {
             // RPOPLPUSH: Lấy link từ WAITING sang PROCESSING
             String url = queue.pollUrl();
@@ -69,7 +70,7 @@ public class MainApp {
                 Thread.sleep(1000); 
             }
         }
-        
+        */
         System.out.println("🏁 Hệ thống đã phân phát hết việc hiện có trong hàng đợi Redis!");
     }
 }

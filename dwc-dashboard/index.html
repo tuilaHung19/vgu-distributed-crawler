@@ -23,14 +23,10 @@
         </nav>
 
         <main class="main-content">
-            <header>
+            <header style="display: flex; justify-content: space-between; align-items: center;">
                 <div class="header-title">
                     <h1>System Overview</h1>
                     <p class="subtitle">Real-time distributed crawler monitoring</p>
-                </div>
-                <div class="system-status">
-                    <span class="pulse-dot"></span>
-                    <span class="status-text">System Online</span>
                 </div>
             </header>
 
@@ -41,7 +37,7 @@
                         <div class="metric-icon primary-bg"><i class="fas fa-layer-group"></i></div>
                         <div class="metric-info">
                             <p class="label">Redis Queue</p>
-                            <h3 class="value" id="queueSize">1,234</h3>
+                            <h3 class="value" id="queueSize">0</h3>
                             <p class="sub-label">Pending URLs</p>
                         </div>
                     </div>
@@ -50,7 +46,7 @@
                         <div class="metric-icon success-bg"><i class="fas fa-file-alt"></i></div>
                         <div class="metric-info">
                             <p class="label">Crawled Articles</p>
-                            <h3 class="value text-success" id="crawledCount">67</h3>
+                            <h3 class="value text-success" id="crawledCount">0</h3>
                             <p class="sub-label">Saved in MongoDB</p>
                         </div>
                     </div>
@@ -59,7 +55,7 @@
                         <div class="metric-icon warning-bg"><i class="fas fa-robot"></i></div>
                         <div class="metric-info">
                             <p class="label">Active Workers</p>
-                            <h3 class="value text-warning" id="activeBots">5</h3>
+                            <h3 class="value text-warning" id="activeBots">0</h3>
                             <p class="sub-label">Running Nodes</p>
                         </div>
                     </div>
@@ -68,7 +64,7 @@
                         <div class="metric-icon danger-bg"><i class="fas fa-tachometer-alt"></i></div>
                         <div class="metric-info">
                             <p class="label">Total Throughput</p>
-                            <h3 class="value text-danger" id="totalSpeed">89.2</h3>
+                            <h3 class="value text-danger" id="totalSpeed">0.0</h3>
                             <p class="sub-label">Links / Second</p>
                         </div>
                     </div>
@@ -78,51 +74,21 @@
                     <div class="section-header">
                         <div class="header-left" style="display: flex; align-items: center; gap: 15px;">
                             <h2>Live Fleet Status</h2>
-                            <span class="badge">5 Active Nodes</span>
                         </div>
-                        <button class="btn-add-worker" id="btnAddBot">
-                            <i class="fas fa-plus"></i> Add Worker
-                        </button>
+
+                        <div class="header-actions" style="display: flex; gap: 10px;">
+                            <button class="btn-dwc btn-secondary" id="btnRunSpider">
+                                <i class="fas fa-spider"></i> Run Spiders
+                            </button>
+
+                            <button class="btn-dwc btn-primary" id="btnAddBot">
+                                <i class="fas fa-plus"></i> Add Worker
+                            </button>
+                        </div>
                     </div>
                     
                     <div class="worker-scroll-container">
                         <div class="worker-grid" id="workerGrid">
-                            <div class="worker-card running">
-                                <div class="w-header">
-                                    <span class="w-name"><i class="fas fa-server"></i> Worker-01</span>
-                                    <span class="w-indicator"></span>
-                                </div>
-                                <div class="w-body">
-                                    <div class="w-stat"><span>Crawled:</span> <strong>345</strong></div>
-                                    <div class="w-stat"><span>Speed:</span> <strong>6.1 l/s</strong></div>
-                                </div>
-                                <button class="btn-kill"><i class="fas fa-power-off"></i> Kill</button>
-                            </div>
-
-                            <div class="worker-card running">
-                                <div class="w-header">
-                                    <span class="w-name"><i class="fas fa-server"></i> Worker-02</span>
-                                    <span class="w-indicator"></span>
-                                </div>
-                                <div class="w-body">
-                                    <div class="w-stat"><span>Crawled:</span> <strong>245</strong></div>
-                                    <div class="w-stat"><span>Speed:</span> <strong>6.3 l/s</strong></div>
-                                </div>
-                                <button class="btn-kill"><i class="fas fa-power-off"></i> Kill</button>
-                            </div>
-
-                            <div class="worker-card error">
-                                <div class="w-header">
-                                    <span class="w-name"><i class="fas fa-server"></i> Worker-03</span>
-                                    <span class="w-indicator"></span>
-                                </div>
-                                <div class="w-body">
-                                    <div class="w-stat"><span>Crawled:</span> <strong>114</strong></div>
-                                    <div class="w-stat"><span>Error:</span> <strong class="text-danger">HTTP 403</strong></div>
-                                </div>
-                                <button class="btn-kill"><i class="fas fa-power-off"></i> Kill</button>
-                            </div>
-                            
                             </div>
                     </div>
                 </div>
@@ -132,8 +98,10 @@
                         <h2>System Performance</h2>
                         <span class="badge-outline">Throughput (Links/s)</span>
                     </div>
-                    <div class="chart-wrapper" style="height: 300px; width: 100%;">
-                        <canvas id="speedChart"></canvas>
+                    <div class="chart-wrapper" style="height: 300px; width: 100%; overflow-x: auto; scroll-behavior: smooth;">
+                        <div id="chartInner" style="width: 100%; height: 100%; min-width: 100%;">
+                            <canvas id="speedChart"></canvas>
+                        </div>
                     </div>
                 </div>
 
@@ -154,36 +122,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="domain-name"><i class="fas fa-globe-asia text-primary"></i> tuoitre.vn</td>
-                                    <td class="time-text">Just now</td>
-                                    <td><span class="pill pill-success">142</span></td>
-                                    <td><span class="pill pill-danger">2</span></td>
-                                    <td class="total-val">144</td>
-                                </tr>
-                                <tr>
-                                    <td class="domain-name"><i class="fas fa-globe-asia text-primary"></i> thanhnien.vn</td>
-                                    <td class="time-text">2 mins ago</td>
-                                    <td><span class="pill pill-success">89</span></td>
-                                    <td><span class="pill pill-danger">0</span></td>
-                                    <td class="total-val">89</td>
-                                </tr>
-                                <tr>
-                                    <td class="domain-name"><i class="fas fa-globe-asia text-primary"></i> vnexpress.net</td>
-                                    <td class="time-text">Pending...</td>
-                                    <td><span class="pill pill-success">0</span></td>
-                                    <td><span class="pill pill-danger">0</span></td>
-                                    <td class="total-val">0</td>
-                                </tr>
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                 </div>
 
             </div>
         </main>
-
     </div>
+    
     <script src="app.js"></script>
 </body>
 </html>

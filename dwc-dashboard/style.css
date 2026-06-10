@@ -680,3 +680,113 @@ input:checked + .slider:before { transform: translateX(20px); }
     transform: translateY(-1px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
+/* Hệ thống nút bấm chung */
+.btn-dwc {
+    padding: 10px 20px;
+    border-radius: 8px; /* Bo góc tròn nhẹ cho giống bento */
+    border: none;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease; /* Hiệu ứng mượt khi di chuột */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Màu cho nút Add Worker */
+.btn-primary {
+    background-color: #6366f1; /* Tím/Xanh chủ đạo */
+}
+.btn-primary:hover { background-color: #4f46e5; }
+.btn-primary:active { transform: scale(0.95); } /* Hiệu ứng nhấn xuống */
+
+/* Màu cho nút Run Spider (Dùng tone xanh Teal/Emerald dịu mắt hơn) */
+.btn-secondary {
+    background-color: #10b981; /* Xanh lá nhạt/Teal sang trọng */
+}
+.btn-secondary:hover { background-color: #059669; }
+.btn-secondary:active { transform: scale(0.95); }  
+
+/* Hiệu ứng cho nút Filter (Màu Tím/Xanh) */
+.btn-apply-filter {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.btn-apply-filter:hover {
+    background-color: #4338ca; /* Tím đậm hơn một chút */
+    transform: translateY(-2px); /* Nảy nhẹ lên */
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); /* Tỏa sáng viền */
+}
+
+/* Hiệu ứng cho nút Pause Stream (Viền xám) */
+.btn-outline {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.btn-outline:hover {
+    background-color: #f8fafc;
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Hiệu ứng đặc biệt cho nút Clear (Viền Đỏ) */
+.btn-outline[style*="color: var(--danger)"] {
+    transition: all 0.3s ease;
+}
+.btn-outline[style*="color: var(--danger)"]:hover {
+    background-color: var(--danger) !important; /* Đổ đầy màu đỏ */
+    color: white !important; /* Chữ chuyển sang trắng */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* ========================================== */
+/* UI CHUYÊN MỤC CON (SUB-DOMAINS ACCORDION) */
+/* ========================================== */
+.domain-group {
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background: #fff;
+    overflow: hidden;
+}
+.domain-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: #f8fafc;
+}
+.domain-header .d-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.btn-expand {
+    background: none; border: none; color: #64748b; cursor: pointer;
+    transition: 0.3s; padding: 5px;
+}
+.btn-expand.active { transform: rotate(180deg); color: var(--primary); }
+
+.domain-body {
+    display: none; /* Ẩn đi mặc định */
+    padding: 12px 16px;
+    border-top: 1px solid var(--border-light);
+}
+.domain-body.show { display: block; } /* Hiện ra khi được click */
+
+.sub-link-list {
+    list-style: none; padding: 0; margin: 0;
+}
+.sub-link-list li {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px dashed #e2e8f0; font-size: 14px;
+    color: #4a5568;
+}
+.sub-link-list li:last-child { border-bottom: none; padding-bottom: 0; }
+.sub-link-list i.fa-link { color: #a0aec0; margin-right: 8px; font-size: 12px;}
+.btn-icon-sm { background: none; border: none; cursor: pointer; color: #ef4444; opacity: 0.5; transition: 0.2s;}
+.btn-icon-sm:hover { opacity: 1; }
